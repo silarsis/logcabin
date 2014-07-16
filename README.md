@@ -8,8 +8,8 @@ This container runs logrotate. To use it:
 
 * In the Dockerfile for the app container, include the line:
   `VOLUME /container/log`
-* When running this container, use the following command line:
-  `docker run -d --link <app_container>:client --privileged --volumes-from <app-container> -v /etc/localtime:/etc/localtime:ro -v /etc/timezone:/etc/timezone:ro`
+* When running this container, use `run.sh` command provided - it takes one
+  argument, the app container name to rotate logs for.
 * In /container/log in the app container, you should have a configuration file
   for logrotate.
 * If you need to send signals to your app (eg. `HUP` to re-open logfiles), then
