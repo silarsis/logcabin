@@ -7,12 +7,12 @@
 [ ${DOCKER_IP+z} ] || {
   DOCKER_IP=$(/sbin/ifconfig docker0 | grep 'inet ' | awk '{ print $2 }')
 }
-[ ${DOCKER_IP+z} ] || {
-  echo "This script cuold not determine the DOCKER_HOST to pass into the container."
+[ "x${DOCKER_IP}" == "x" ] && {
+  echo "This script could not determine the DOCKER_HOST to pass into the container."
   echo "Please export DOCKER_IP and try again."
   exit -1
 }
-DOCKER_RUN="docker run -d -e DOCKER_HOST=tcp://${DOCKER_IP}:4243 ${TIMEZONE_FLAGS}"
+DOCKER_RUN="docker run -it -e DOCKER_HOST=tcp://${DOCKER_IP}:4243 ${TIMEZONE_FLAGS}"
 
 set -x
 

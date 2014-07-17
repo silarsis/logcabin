@@ -10,7 +10,7 @@ signal() {
 rotatelogs() {
   # Run a container with the volume mounted that will run logrotate
   # Run in a container so we can mount the volume to look for logrotate conf
-  docker run -d -e CLIENT_NAME=${CID} --volumes-from ${CID} logcabin /usr/local/bin/logrotate.sh
+  docker run -it -e CLIENT_NAME=${CID} -e DOCKER_HOST=${DOCKER_HOST} --volumes-from ${CID} logcabin /usr/local/bin/logrotate.sh
 }
 
 IDS=$(docker ps -q)
@@ -18,7 +18,6 @@ for CID in ${IDS}; do
   for VOLUME in $(docker inspect -f "{{ .Volumes }}" ${CID} | sed 's/^.*\[//' | sed 's/\]$//'); do
     if [ $(echo ${VOLUME} | awk 'BEGIN { FS=":" } { print $1 }') == "/container/log" ]; then
       rotatelogs
-      signal
     fi
   done
 done
