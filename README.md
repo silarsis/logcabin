@@ -8,17 +8,21 @@ This container runs logrotate. To use it:
 
 * In the Dockerfile for the app container, include the line:
   `VOLUME /container/log`
-* When running this container, use `run.sh` command provided - it takes one
-  argument, the app container name to rotate logs for.
-* In /container/log in the app container, you should have a configuration file
-  for logrotate.
+* When running this container, use the `run.sh` command provided. It takes some
+  environment variables, `SIGNAL` to tell it to send a signal to each found
+  container, and `ROTATE` to tell it to call logrotate on each container. Set
+  SIGNAL to the signal you want to send (typically `HUP`), and ROTATE to
+  anything non-blank to trigger the behaviour.
+* In /container/log in the app container, you should have a logrotate.conf if
+  you want logcabin to rotate your logs for you.
 * If you need to send signals to your app (eg. `HUP` to re-open logfiles), then
-  the line you should use is `kill -HUP CONTAINER`. This command will be converted
-  to a signal to the first process in your container (ie. PID 1 or the CMD or
-  ENTRYPOINT specified in your Dockerfile), so please make sure signals either
-  propogate correctly, or trigger the correct behaviour in your app. Note also,
-  the conversion of this command is fairly strict in the format it expects, so
-  please don't deviate from the above, except in replacing `HUP` with any other signal.
+  the line you should use in the logrotate.conf is `kill -HUP CONTAINER`.
+  This command will be converted to a signal to the first process in your
+  container (ie. PID 1 or the CMD or ENTRYPOINT specified in your Dockerfile),
+  so please make sure signals either propogate correctly, or trigger the
+  correct behaviour in your app. Note also, the conversion of this command is
+  fairly strict in the format it expects, so please don't deviate from the
+  above, except in replacing `HUP` with any other signal.
 
 ## FUSE
 
