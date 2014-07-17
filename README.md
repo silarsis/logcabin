@@ -27,16 +27,18 @@ can be mounted to other containers. The filesystem will take file writes
 and convert them to splunkable data - thus getting around the requirement
 to rotate logfiles.
 
-*** This is not currently operational.
+**This is not currently operational.**
 
 Expect to take environment variables to indicate where to send logs to,
 first cab off the rank will be splunk support.
 
 Run this as:
 
+```
 docker build -t logcabin .
-docker run --privileged -i -t --name=logcabin logcabin
+docker run --privileged -it --name=logcabin logcabin
+```
 
 Use it as:
 
-docker run -i -t --volumes-from=logcabin ubuntu /bin/bash
+`docker run -it --volumes-from=logcabin ubuntu /bin/bash`
